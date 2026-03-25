@@ -15,7 +15,16 @@ class Favourite extends Model
         return $favourite->save();
     }
 
-    public static function deleteFavourite(Favourite $favourite): bool {
-        return $favourite->delete();
+    public static function deleteFavourite(int $recipeId, string $userId): bool {
+        $favourite = Favourite::where('user_id', $userId)
+            ->where('recipe_id', $recipeId)
+            ->first();
+
+        if (!$favourite) {
+            return false;
+        }
+        else {
+            return $favourite->delete();
+        }
     }
 }
