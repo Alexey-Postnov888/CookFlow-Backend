@@ -50,16 +50,14 @@ class Recipe extends Model
 
     public static function getCategoryRecipesById(int $categoryId): Collection {
 
-        return Recipe::join('category_recipes', 'recipes.id', '=', 'category_recipes.recipe_id')
-            ->where('category_recipes.category_id', $categoryId)
+        return Recipe::where('category_recipes.category_id', $categoryId)
             ->select('recipes.*')
             ->get();
     }
 
     public static function getCategoryRecipesByTitle(string $categoryTitle): Collection {
 
-        return Recipe::join('category_recipes', 'recipes.id', '=', 'category_recipes.recipe_id')
-            ->join('categories', 'category_recipes.category_id', '=', 'categories.id')
+        return Recipe::join('categories', 'recipes.category_id', '=', 'categories.id')
             ->where('category.category_title', $categoryTitle)
             ->select('recipes.*')
             ->get();
