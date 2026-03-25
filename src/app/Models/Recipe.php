@@ -15,7 +15,8 @@ class Recipe extends Model
         'description',
         'ingredients',
         'steps',
-        'author_id'
+        'author_id',
+        'category_id',
     ];
 
     protected $casts = [
