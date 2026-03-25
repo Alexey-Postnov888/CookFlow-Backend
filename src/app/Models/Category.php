@@ -27,7 +27,14 @@ class Category extends Model
         return $category->save();
     }
 
-    public static function deleteCategory(Category $category): bool {
-        return $category->delete();
+    public static function deleteCategoryById(int $categoryId): bool {
+        $category = Category::find($categoryId);
+
+        if (!$category) {
+            return false;
+        }
+        else {
+            return $category->delete();
+        }
     }
 }
