@@ -9,24 +9,41 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
+    protected $primaryKey = 'sub';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    protected $fillable = [
+        'sub',
+        'name',
+        'preferred_username',
+        'given_name',
+        'family_name',
+        'email',
+        'email_verified',
+        'realm_access',
+    ];
+
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'email_verified'   => 'boolean',
+            'realm_access'     => 'array',
         ];
+    }
+
+    public function getRolesAttribute(): array
+    {
+        return $this->realm_access['roles'] ?? [];
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return in_array($role, $this->getRolesAttribute());
     }
 }
