@@ -1,4 +1,6 @@
 /.composer/
+/.config
 /.idea/
 /vendor/
 /.bash_history
+.config

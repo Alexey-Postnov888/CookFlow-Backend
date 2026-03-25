@@ -33,24 +33,23 @@ class Recipe extends Model
         return Recipe::findOrFail($id);
     }
 
-    public static function getFavouriteRecipes(int $userId): Collection {
-        return Recipe::join('favourites', 'recipes.recipe_id', '=', 'favourites.recipe_id')
+    public static function getFavouriteRecipes(string $userId): Collection {
+        return Recipe::join('favourites', 'recipes.id', '=', 'favourites.recipe_id')
             ->where('favourites.user_id', $userId)
             ->select('recipes.*')
             ->get();
     }
 
-    public static function getUserRecipes(int $userId): Collection {
+    public static function getUserRecipes(string $userId): Collection {
 
-        return Recipe::join('users', 'recipes.author_id', '=', 'users.id')
-            ->where('recipes.author_id', $userId)
+        return Recipe::where('recipes.author_id', $userId)
             ->select('recipes.*')
             ->get();
     }
 
     public static function getCategoryRecipesById(int $categoryId): Collection {
 
-        return Recipe::where('category_recipes.category_id', $categoryId)
+        return Recipe::where('recipes.category_id', $categoryId)
             ->select('recipes.*')
             ->get();
     }
@@ -58,7 +57,7 @@ class Recipe extends Model
     public static function getCategoryRecipesByTitle(string $categoryTitle): Collection {
 
         return Recipe::join('categories', 'recipes.category_id', '=', 'categories.id')
-            ->where('category.category_title', $categoryTitle)
+            ->where('categories.title', $categoryTitle)
             ->select('recipes.*')
             ->get();
     }
@@ -71,7 +70,13 @@ class Recipe extends Model
         return $recipe->save();
     }
 
-    public static function deleteRecipe(Recipe $recipe): bool {
-        return $recipe->delete();
+    public static function deleteRecipeById(int $recipeId): bool {
+        $recipe = Recipe::find($recipeId);
+        if (!$recipe) {
+            return false;
+        }
+        else {
+            return $recipe->delete();
+        }
     }
 }
