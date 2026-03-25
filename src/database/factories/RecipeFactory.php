@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use App\Models\Recipe;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -24,6 +25,7 @@ class RecipeFactory extends Factory
             'ingredients' => fake()->sentence(),
             'steps' => fake()->sentence(),
             'author_id' => fake()->uuid(),
+            'category_id' => Category::factory(),
         ];
     }
 }
