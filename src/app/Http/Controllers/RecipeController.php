@@ -232,7 +232,7 @@ class RecipeController extends Controller
     /**
      * GET /recipes/categories/{category-id} - получить список рецептов по категории
      */
-    public function byCategory(int $categoryId): JsonResponse
+    public function getRecipesByCategory(int $categoryId): JsonResponse
     {
         try
         {
