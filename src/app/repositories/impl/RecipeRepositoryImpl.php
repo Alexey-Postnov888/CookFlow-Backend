@@ -1,6 +1,6 @@
 <?php
 
-namespace App\repositories\impl;;
+namespace App\repositories\impl;
 
 use App\Models\Comment;
 use App\Models\Recipe;
