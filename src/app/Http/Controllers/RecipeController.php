@@ -47,8 +47,15 @@ class RecipeController extends Controller
      */
     public function postRecipe(Request $request): JsonResponse
     {
-        //TODO проверять роль
         try {
+            $userRole = $request->hasRole('author');
+            if(!$userRole){
+                return response()->json([
+                    "success" => false,
+                    "message" => "You must be author to post a recipe"
+                ], Response::HTTP_FORBIDDEN);
+            }
+
             $validated = $request->validate([
                 'title' => 'required|string',
                 'description' => 'required|string',
@@ -118,9 +125,12 @@ class RecipeController extends Controller
         try
         {
             $recipe = $this->recipeRepository->getRecipeById($id);
+
             $userId = $request->sub();
             $authorId = $recipe->author_id;
-            if ($userId != $authorId)
+            $userRole = $request->hasRole('admin');
+
+            if ($userId != $authorId && !$userRole)
             {
                 return response()->json([
                     "success" => false,
@@ -194,10 +204,13 @@ class RecipeController extends Controller
         try
         {
             $recipe = $this->recipeRepository->getRecipeById($id);
+
             $authorId = $recipe->author_id;
             $userId = $request->sub();
 
-            if ($authorId != $userId)
+            $userRole = $request->hasRole('admin');
+
+            if ($authorId != $userId && !$userRole)
             {
                 return response()->json([
                     "success" => false,
