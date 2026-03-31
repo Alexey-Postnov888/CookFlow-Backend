@@ -98,4 +98,24 @@ class UserController extends Controller
             );
         }
     }
+
+    public function getAuthors(): JsonResponse
+    {
+        try {
+            $response = $this->userService->getAuthors();
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'data' => $response
+                ]
+            );
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'error' => 'Failed to get authors'
+                ]
+            );
+        }
+    }
 }

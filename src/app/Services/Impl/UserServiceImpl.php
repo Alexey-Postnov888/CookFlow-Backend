@@ -139,4 +139,17 @@ class UserServiceImpl implements UserService
 
         return null;
     }
+
+    public function getAuthors(): array
+    {
+        $adminToken = $this->getAdminToken();
+
+        $response = Http::withToken($adminToken)-> get($this->keycloakUrl.'/admin/realms/'.$this->realm.'/roles/author/users');
+
+        if (!$response->successful()) {
+            throw new Exception('Failed to get authors');
+        }
+
+        return $response->json();
+    }
 }

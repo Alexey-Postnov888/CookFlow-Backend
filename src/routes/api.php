@@ -20,3 +20,4 @@ Route::middleware(['auth.keycloak'])->group(function () {
 Route::prefix('recipes')->group(base_path('routes/comments.php'));
 Route::prefix('recipes')->group(base_path('routes/recipes.php'));
 Route::prefix('users')->group(base_path('routes/users.php'));
+Route::prefix('authors')->group(base_path('routes/authors.php'));
