@@ -9,6 +9,7 @@ interface CommentRepository
 {
     public function getCommentById(int $commentId): Comment|null;
     public function getCommentsByRecipeId(int $recipeId): Collection;
+    public function getRecipeAuthorId(int $commentId): string|null;
     public function postComment(Comment $comment): bool;
     public function deleteComment(Comment $comment): bool;
     public function updateComment(Comment $comment, string $newComment): bool;

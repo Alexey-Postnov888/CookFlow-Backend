@@ -122,7 +122,9 @@ class CommentController extends Controller
                 ], Response::HTTP_NOT_FOUND);
             }
 
-            if ($comment['user_id'] != $request->sub()) {
+            $userId = $request->sub();
+            $authorId = $this->commentRepository->getRecipeAuthorId($commentId);
+            if ($comment['user_id'] != $userId && $authorId != $userId && !$request->hasRole('admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => "You don't have permission to delete this comment"

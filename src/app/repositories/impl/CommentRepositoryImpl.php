@@ -18,6 +18,13 @@ class CommentRepositoryImpl implements CommentRepository {
         return Comment::where("recipe_id", $recipeId)->get();
     }
 
+    public function getRecipeAuthorId(int $commentId): string|null
+    {
+        return Comment::join('recipes', 'recipes.id', '=', 'comments.recipe_id')
+            ->where('comments.id', $commentId)
+            ->first()->author_id;
+    }
+
     public function postComment(Comment $comment): bool
     {
         return $comment->save();
