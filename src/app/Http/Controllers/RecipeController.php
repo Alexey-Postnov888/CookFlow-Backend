@@ -47,8 +47,15 @@ class RecipeController extends Controller
      */
     public function postRecipe(Request $request): JsonResponse
     {
-        //TODO проверять роль
         try {
+            $userRole = $request->hasRole('author') || $request->hasRole('admin');
+            if(!$userRole){
+                return response()->json([
+                    "success" => false,
+                    "message" => "You must be author to post a recipe"
+                ], Response::HTTP_FORBIDDEN);
+            }
+
             $validated = $request->validate([
                 'title' => 'required|string',
                 'description' => 'required|string',
@@ -118,9 +125,12 @@ class RecipeController extends Controller
         try
         {
             $recipe = $this->recipeRepository->getRecipeById($id);
+
             $userId = $request->sub();
             $authorId = $recipe->author_id;
-            if ($userId != $authorId)
+            $userRole = $request->hasRole('admin');
+
+            if ($userId != $authorId && !$userRole)
             {
                 return response()->json([
                     "success" => false,
@@ -139,17 +149,18 @@ class RecipeController extends Controller
 
             $newRecipe = (new Recipe())->fill($validated);
 
-            $updatedRecipe = new Recipe();
-            $updatedRecipe->fill([
+            $recipe->fill([
                 'title'=>$newRecipe->title ?: $recipe->title,
                 'description'=>$newRecipe->description ?: $recipe->description,
                 'ingredients'=>$newRecipe->ingredients ?: $recipe->ingredients,
                 'steps'=>$newRecipe->steps ?: $recipe->steps,
                 'image_url'=>$newRecipe->image_url ?: $recipe->image_url,
                 'category_id'=>$newRecipe->category_id ?: $recipe->category_id,
+
+                'author_id'=>$recipe->author_id
             ]);
 
-            $isDone = $this->recipeRepository->updateRecipe($id, $updatedRecipe);
+            $isDone = $this->recipeRepository->updateRecipe($recipe);
             if($isDone)
             {
                 return response()->json([
@@ -194,10 +205,13 @@ class RecipeController extends Controller
         try
         {
             $recipe = $this->recipeRepository->getRecipeById($id);
+
             $authorId = $recipe->author_id;
             $userId = $request->sub();
 
-            if ($authorId != $userId)
+            $userRole = $request->hasRole('admin');
+
+            if ($authorId != $userId && !$userRole)
             {
                 return response()->json([
                     "success" => false,
@@ -218,15 +232,24 @@ class RecipeController extends Controller
                 return response()->json([
                     "success" => false,
                     "message" => "Recipe not deleted"
-                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                ], Response::HTTP_NOT_FOUND);
             }
-        } catch (Exception $e)
+        }
+        catch (ModelNotFoundException)
+        {
+            return response()->json([
+                "success" => false,
+                "message" => "Recipe not deleted, not found"
+            ], Response::HTTP_NOT_FOUND);
+        }
+        catch (Exception $e)
         {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+
     }
 
     /**
@@ -277,7 +300,7 @@ class RecipeController extends Controller
     /**
      * GET /recipes/authors/{authorId} - рецепты пользователя
      */
-    public function getRecipeByAuthor(string $authorId): JsonResponse
+    public function getRecipesByAuthor(string $authorId): JsonResponse
     {
         try
         {
