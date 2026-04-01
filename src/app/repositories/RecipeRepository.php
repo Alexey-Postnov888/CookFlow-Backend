@@ -12,6 +12,6 @@ interface RecipeRepository
     public function getFavourites(string $userId): Collection;
     public function getRecipeByAuthor (string $authorId): Collection;
     public function postRecipe(Recipe $recipe): bool;
-    public function updateRecipe(int $recipeId, Recipe $recipe): bool;
+    public function updateRecipe(Recipe $recipe): bool;
     public function deleteRecipe(int $recipeId): bool;
 }

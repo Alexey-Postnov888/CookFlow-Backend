@@ -149,17 +149,18 @@ class RecipeController extends Controller
 
             $newRecipe = (new Recipe())->fill($validated);
 
-            $updatedRecipe = new Recipe();
-            $updatedRecipe->fill([
+            $recipe->fill([
                 'title'=>$newRecipe->title ?: $recipe->title,
                 'description'=>$newRecipe->description ?: $recipe->description,
                 'ingredients'=>$newRecipe->ingredients ?: $recipe->ingredients,
                 'steps'=>$newRecipe->steps ?: $recipe->steps,
                 'image_url'=>$newRecipe->image_url ?: $recipe->image_url,
                 'category_id'=>$newRecipe->category_id ?: $recipe->category_id,
+
+                'author_id'=>$recipe->author_id
             ]);
 
-            $isDone = $this->recipeRepository->updateRecipe($id, $updatedRecipe);
+            $isDone = $this->recipeRepository->updateRecipe($recipe);
             if($isDone)
             {
                 return response()->json([
@@ -231,15 +232,24 @@ class RecipeController extends Controller
                 return response()->json([
                     "success" => false,
                     "message" => "Recipe not deleted"
-                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                ], Response::HTTP_NOT_FOUND);
             }
-        } catch (Exception $e)
+        }
+        catch (ModelNotFoundException)
+        {
+            return response()->json([
+                "success" => false,
+                "message" => "Recipe not deleted, not found"
+            ], Response::HTTP_NOT_FOUND);
+        }
+        catch (Exception $e)
         {
             return response()->json([
                 "success" => false,
                 "message" => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+
     }
 
     /**
