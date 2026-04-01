@@ -36,12 +36,12 @@ class CategoryController extends Controller
 
     public function postCategory(Request $request):JsonResponse{
         try{
-//            if(!$request->hasRole('admin')){
-//                return response()->json([
-//                    'success' => false,
-//                    'message' => "Forbidden: You do not have admin permissions"
-//                ], Response::HTTP_FORBIDDEN);
-//            }
+            if(!$request->hasRole('admin')){
+                return response()->json([
+                    'success' => false,
+                    'message' => "Forbidden: You do not have admin permissions"
+                ], Response::HTTP_FORBIDDEN);
+            }
 
             $validated = $request->validate([
                 "categoryBody" => "required|string|max:255"
@@ -85,12 +85,12 @@ class CategoryController extends Controller
 
     public function deleteCategory(Request $request, $categoryId): JsonResponse{
         try{
-//            if(!$request->hasRole('admin')){
-//                return response()->json([
-//                    'success' => false,
-//                    'message' => "Forbidden: You do not have admin permissions"
-//                ], Response::HTTP_FORBIDDEN);
-//            }
+            if(!$request->hasRole('admin')){
+                return response()->json([
+                    'success' => false,
+                    'message' => "Forbidden: You do not have admin permissions"
+                ], Response::HTTP_FORBIDDEN);
+            }
 
             $userId = $request->sub();
             if (!$userId){
@@ -122,12 +122,12 @@ class CategoryController extends Controller
 
     public function updateCategory(Request $request, int $categoryId): JsonResponse{
         try{
-//            if(!$request->hasRole('admin')){
-//                return response()->json([
-//                    'success' => false,
-//                    'message' => "Forbidden: You do not have admin permissions"
-//                ], Response::HTTP_FORBIDDEN);
-//            }
+            if(!$request->hasRole('admin')){
+                return response()->json([
+                    'success' => false,
+                    'message' => "Forbidden: You do not have admin permissions"
+                ], Response::HTTP_FORBIDDEN);
+            }
 
             $validated = $request->validate([
                 "categoryBody" => "required|string|max:255"
