@@ -290,7 +290,7 @@ class RecipeController extends Controller
     /**
      * GET /recipes/authors/{authorId} - рецепты пользователя
      */
-    public function getRecipeByAuthor(string $authorId): JsonResponse
+    public function getRecipesByAuthor(string $authorId): JsonResponse
     {
         try
         {
