@@ -20,6 +20,9 @@ class CommentController extends Controller
         $this->commentRepository = $commentRepository;
     }
 
+    /**
+     * GET /recipes/comments/{comment_id} - получение комментария по его id
+     */
     public function getCommentById(int $commentId): JsonResponse
     {
         try
@@ -49,6 +52,10 @@ class CommentController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * GET /recipes/{recipe_id}/comments - получение всех комментариев к рецепту с id=recipe_id
+     */
     public function getCommentsByRecipeId(int $recipeId): JsonResponse
     {
         try
@@ -68,6 +75,9 @@ class CommentController extends Controller
         }
     }
 
+    /**
+     * POST /recipes/{recipe_id}/comments - создать комментарий к рецепту с id=recipe_id
+     */
     public function postComment(Request $request, int $recipeId): JsonResponse
     {
         try
@@ -109,6 +119,9 @@ class CommentController extends Controller
         }
     }
 
+    /**
+     * DELETE /recipes/comments/{comment_id} - удаление комментария по его id
+     */
     public function deleteComment(Request $request, int $commentId): JsonResponse
     {
         try
@@ -156,6 +169,9 @@ class CommentController extends Controller
         }
     }
 
+    /**
+     * PUT /recipes/comments/{comment_id} - изменение комментария по его id
+     */
     public function updateComment(Request $request, int $commentId) {
         try
         {
