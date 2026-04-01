@@ -17,6 +17,11 @@ class FavouriteController extends Controller
         $this->favouriteRepository = $favouriteRepository;
     }
 
+    /**
+     * POST - создать категорию
+     * @param int $recipeId Id рецепта, который нужно добавить в избранное
+     * @param Request $request Запрос
+     */
     public function createFavourite(Request $request, int $recipeId): JsonResponse {
         try
         {
@@ -45,6 +50,11 @@ class FavouriteController extends Controller
 
     }
 
+    /**
+     * DELETE - удалить категорию
+     * @param int $recipeId Id рецепта, у которого надо убрать избранное
+     * @param Request $request Запрос
+     * */
     public function deleteFavourite(Request $request, int $recipeId): JsonResponse {
         try{
             $userId = $request->sub();
