@@ -18,6 +18,9 @@ class CategoryController extends Controller
         $this->categoryRepository = $categoryRepository;
     }
 
+    /**
+     * GET recipes/categories - получить все категории
+     */
     public function getCategories(): JsonResponse {
         try{
             $categories = $this->categoryRepository->getCategories();
@@ -34,6 +37,10 @@ class CategoryController extends Controller
         }
     }
 
+    /**
+     * POST recipes/categories - создать категорию
+     * @param Request $request Запрос
+     */
     public function postCategory(Request $request):JsonResponse{
         try{
             if(!$request->hasRole('admin')){
@@ -55,7 +62,7 @@ class CategoryController extends Controller
                 ], Response::HTTP_UNAUTHORIZED);
             }
 
-            $isSuccess = $this->categoryRepository->postCategory($request['categoryBody'],$request->sub());
+            $isSuccess = $this->categoryRepository->postCategory($request['categoryBody']);
 
             if ($isSuccess){
                 return response()->json([
@@ -83,7 +90,12 @@ class CategoryController extends Controller
         }
     }
 
-    public function deleteCategory(Request $request, $categoryId): JsonResponse{
+    /**
+     * DELETE recipes/categories/{categoryId}- удалить категорию
+     * @param Request $request Запрос
+     * @param int $categoryId Id категории, которую нужно удалить
+     */
+    public function deleteCategory(Request $request, int $categoryId): JsonResponse{
         try{
             if(!$request->hasRole('admin')){
                 return response()->json([
@@ -100,7 +112,7 @@ class CategoryController extends Controller
                 ], Response::HTTP_UNAUTHORIZED);
             }
 
-            $isSuccess = $this->categoryRepository->deleteCategory($categoryId,$userId);
+            $isSuccess = $this->categoryRepository->deleteCategory($categoryId);
             if ($isSuccess){
                 return response()->json([
                     'success' => true,
@@ -120,6 +132,11 @@ class CategoryController extends Controller
         }
     }
 
+    /**
+     * UPDATE recipes/categories/{categoryId} - обновить категорию
+     * @param Request $request Запрос
+     * @param int $categoryId Id категории, которую надо обновить
+     */
     public function updateCategory(Request $request, int $categoryId): JsonResponse{
         try{
             if(!$request->hasRole('admin')){
@@ -141,7 +158,7 @@ class CategoryController extends Controller
                 ], Response::HTTP_UNAUTHORIZED);
             }
 
-            $isSuccess = $this->categoryRepository->updateCategory($categoryId,$request['categoryBody'],$userId);
+            $isSuccess = $this->categoryRepository->updateCategory($categoryId,$request['categoryBody']);
             if ($isSuccess){
                 return response()->json([
                     'success' => true,
