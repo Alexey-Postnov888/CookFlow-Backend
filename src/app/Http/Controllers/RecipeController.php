@@ -48,7 +48,7 @@ class RecipeController extends Controller
     public function postRecipe(Request $request): JsonResponse
     {
         try {
-            $userRole = $request->hasRole('author');
+            $userRole = $request->hasRole('author') || $request->hasRole('admin');
             if(!$userRole){
                 return response()->json([
                     "success" => false,
