@@ -6,6 +6,10 @@ use App\Models\Category;
 use App\repositories\CategoryRepository;
 use Ramsey\Collection\Collection;
 
+    public function getCategoryById(int $categoryId): Category
+    {
+        return Category::where('id', $categoryId)->first();
+    }
 
 class CategoryRepositoryImpl implements CategoryRepository{
 

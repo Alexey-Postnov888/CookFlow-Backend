@@ -10,4 +10,5 @@ interface UserService {
     public function changeRole(string $userId, array $roleNames): void;
     public function getSubFromJWT(string $jwt): ?string;
     public function getAuthors(): array;
+    public function getAuthorById(string $authorId): array;
 }

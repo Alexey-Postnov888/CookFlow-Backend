@@ -19,6 +19,25 @@ class CategoryController extends Controller
     }
 
     /**
+     * GET recipes/category/{category_id} - получить категорию по id
+     */
+    public function getCategoryById(int $categoryId): JsonResponse {
+        try{
+            $category = $this->categoryRepository->getCategoryById($categoryId);
+
+            return response()->json([
+                'success' => true,
+                'category' => $category
+            ], Response::HTTP_OK);
+        } catch (Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
      * GET recipes/categories - получить все категории
      */
     public function getCategories(): JsonResponse {
