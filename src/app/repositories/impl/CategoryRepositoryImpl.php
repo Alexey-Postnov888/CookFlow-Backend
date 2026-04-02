@@ -9,21 +9,28 @@ use Ramsey\Collection\Collection;
 
 class CategoryRepositoryImpl implements CategoryRepository{
 
-
+    /**
+     * GET - получить все категории
+     */
     public function getCategories(): \Illuminate\Database\Eloquent\Collection
     {
         return Category::all();
     }
-
-    public function postCategory(string $categoryBody, string $userId): bool
+    /**
+     * POST - создать категорию
+     * @param string $categoryBody Название категории
+     */
+    public function postCategory(string $categoryBody): bool
     {
         $category = new Category();
-        //$category->user_id = $userId;
         $category->title = $categoryBody;
         return $category->save();
     }
-
-    public function deleteCategory(int $categoryId, string $userId): bool
+    /**
+     * DELETE - удалить категорию
+     * @param int $categoryId Id категории, которую нужно удалить
+     */
+    public function deleteCategory(int $categoryId): bool
     {
         $category = Category::where("id", $categoryId)
             ->first();
@@ -33,8 +40,12 @@ class CategoryRepositoryImpl implements CategoryRepository{
             return false;
         }
     }
-
-    public function updateCategory(int $categoryId, string $newCategory, string $userId): bool
+    /**
+     * UPDATE - обновить категорию
+     * @param int $categoryId Id категории, которую надо обновить
+     * @param string $newCategory Новое название категории
+     */
+    public function updateCategory(int $categoryId, string $newCategory): bool
     {
         $category = Category::where("id", $categoryId)
             ->first();
