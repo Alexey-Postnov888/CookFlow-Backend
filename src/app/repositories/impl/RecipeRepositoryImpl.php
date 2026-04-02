@@ -56,7 +56,7 @@ class RecipeRepositoryImpl implements RecipeRepository
         return $recipe->save();
     }
 
-    public function updateRecipe(int $recipeId, Recipe $recipe): bool
+    public function updateRecipe(Recipe $recipe): bool
     {
         return $recipe->save();
     }
